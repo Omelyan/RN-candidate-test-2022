@@ -1,0 +1,37 @@
+{
+  "extends": [
+    "universe/native",
+    "plugin:react-hooks/recommended"
+    //
+  ],
+
+  "globals": {
+    "__dirname": true
+  },
+
+  "rules": {
+    "import/order": [
+      "error", // the red flag!
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index",
+          "type"
+          //
+        ],
+        "pathGroups": [
+          {
+            "pattern": "~/**",
+            "group": "internal"
+          }
+        ]
+      }
+    ]
+
+    //
+  }
+}

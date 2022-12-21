@@ -1,11 +1,6 @@
-/**
- * Learn more about using TypeScript with React Navigation:
- * https://reactnavigation.org/docs/typescript/
- */
-
-import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+
+import * as Screens from '~/screens';
 
 declare global {
   namespace ReactNavigation {
@@ -13,23 +8,15 @@ declare global {
   }
 }
 
-export type RootStackParamList = {
-  Root: NavigatorScreenParams<RootTabParamList> | undefined;
-  Modal: undefined;
-  NotFound: undefined;
-};
+type Routes = keyof typeof Screens;
 
-export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<
-  RootStackParamList,
-  Screen
->;
+type RouteParams<T extends { [name in Routes]: unknown }> = T;
 
-export type RootTabParamList = {
-  TabOne: undefined;
-  TabTwo: undefined;
-};
+export type RootStackParamList = RouteParams<{
+  Profile: undefined;
+  SignIn: undefined;
+  SignUp: undefined;
+}>;
 
-export type RootTabScreenProps<Screen extends keyof RootTabParamList> = CompositeScreenProps<
-  BottomTabScreenProps<RootTabParamList, Screen>,
-  NativeStackScreenProps<RootStackParamList>
->;
+export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
+  NativeStackScreenProps<RootStackParamList, Screen>;

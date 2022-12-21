@@ -1,33 +1,38 @@
-import { FontAwesome } from '@expo/vector-icons';
-import * as Font from 'expo-font';
+import { useEffect, useRef, useState } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect, useState } from 'react';
 
-export default function useCachedResources() {
-  const [isLoadingComplete, setLoadingComplete] = useState(false);
+import { loadSession, SessionData } from '~/context';
+import { openDatabase } from '~/api/database';
 
-  // Load any resources or data that we need prior to rendering the app
-  useEffect(() => {
-    async function loadResourcesAndDataAsync() {
-      try {
-        SplashScreen.preventAutoHideAsync();
+export function useCachedResources() {
+  const [isLoading, setLoading] = useState(true);
+  const initialSessionData = useRef<SessionData>();
 
-        // Load fonts
-        await Font.loadAsync({
-          ...FontAwesome.font,
-          'space-mono': require('../assets/fonts/SpaceMono-Regular.ttf'),
-        });
-      } catch (e) {
-        // We might want to provide this error information to an error reporting service
-        console.warn(e);
-      } finally {
-        setLoadingComplete(true);
-        SplashScreen.hideAsync();
-      }
-    }
+  useEffect(
+    () => {
+      (async function () {
+        try {
+          SplashScreen.preventAutoHideAsync();
 
-    loadResourcesAndDataAsync();
-  }, []);
+          // loading or creating database
+          openDatabase();
 
-  return isLoadingComplete;
+          // loading session data if any
+          initialSessionData.current = await loadSession();
+
+          //
+        } catch (e) {
+          console.warn(e);
+          //
+        } finally {
+          setLoading(false);
+          SplashScreen.hideAsync();
+        }
+      })();
+    },
+    //
+    []
+  );
+
+  return { isLoading, initialSessionData };
 }
