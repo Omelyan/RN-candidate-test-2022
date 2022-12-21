@@ -88,7 +88,12 @@ export default (props: RootStackScreenProps<'SignUp'>) => {
         />
       </Area>
 
-      <Area flex={2}></Area>
+      <Area flex={2}>
+        <Label light>
+          Yes, I know it's not 100% done, but I think it's 90%... Some components are missing, but
+          the main functionality is done and the code is main thing, like in real project.
+        </Label>
+      </Area>
 
       <Button
         title="Next"
